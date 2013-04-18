@@ -18,10 +18,10 @@ else { $txt_title = 'VirtualPol - '._('La primera Red Social Democrática'); }
 $pol['config']['bg'] = 'tapiz-lineas-verdes.jpg';
 
 // Tapiz de fondo (1400x100)
-if (isset($_GET['bg'])) { 
+if (isset($_GET['bg'])) {
 	$body_bg = 'url(\'http://'.$_GET['bg'].'\')';
-} else if (isset($pol['config']['bg'])) { 
-	$body_bg = 'url(\''.IMG.'bg/'.$pol['config']['bg'].'\')'; 
+} else if (isset($pol['config']['bg'])) {
+	$body_bg = 'url(\''.IMG.'bg/'.$pol['config']['bg'].'\')';
 } else { $body_bg = 'none'; }
 
 ?>
@@ -30,7 +30,7 @@ if (isset($_GET['bg'])) {
 <head>
 <title><?=$txt_title?></title>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-<meta name="language" content="es_ES" />
+<meta name="language" content="pt_BR" />
 <meta name="description" content="<?=(isset($txt_description)?$txt_description:$txt_title.' - '.$kw.PAIS)?> | <?=_('La primera Red Social Democrática')?> | VirtualPol" />
 
 <link rel="stylesheet" type="text/css" href="<?=IMG?>style_all.css?v=<?=VER?>" media="all" />
@@ -55,35 +55,35 @@ p_scroll = false;
 <body>
 
 <div id="content-left">
-	
-	<a href="http://www.virtualpol.com"><img src="<?=IMG?>logo/vp2.png" width="200" height="60" alt="VirtualPol" /></a>
-	
+
+	<a href="http://www.virtualpol.vacau.com"><img src="<?=IMG?>logo/vp2.png" width="200" height="60" alt="VirtualPol" /></a>
+
 	<ul class="menu vertical">
 		<?=(isset($pol['pais'])?'<li><a href="http://'.strtolower($pol['pais']).'.'.DOMAIN.'"><b>'._('Ir a').' '.$pol['pais'].'</b></a></li>':'')?>
-		<li><a href="http://www.virtualpol.com/video"><?=_('Vídeo bienvenida')?></a></li>
-		<li><a href="http://www.virtualpol.com/documentacion"><?=_('Documentación')?></a></li>
-		<li><a href="http://www.virtualpol.com/TOS"><?=_('Condiciones de uso')?></a></li>
-		<li><a href="http://www.virtualpol.com/desarrollo"><?=_('Desarrollo')?></a></li>
+		<li><a href="http://www.virtualpol.vacau.com/video"><?=_('Vídeo bienvenida')?></a></li>
+		<li><a href="http://www.virtualpol.vacau.com/documentacion"><?=_('Documentación')?></a></li>
+		<li><a href="http://www.virtualpol.vacau.com/TOS"><?=_('Condiciones de uso')?></a></li>
+		<li><a href="http://www.virtualpol.vacau.com/desarrollo"><?=_('Desarrollo')?></a></li>
 	</ul>
 
 	<div id="menu-next">
 
-<?=(nucleo_acceso('ciudadanos_global')&&false?'<p style="text-align:center;">'.boton(_('Donaciones'), 'http://www.virtualpol.com/donaciones', false, 'small pill orange').'</p>':'')?>
+<?=(nucleo_acceso('ciudadanos_global')&&false?'<p style="text-align:center;">'.boton(_('Donaciones'), 'http://www.virtuapol.vacau.com/donaciones', false, 'small pill orange').'</p>':'')?>
 
 
 <?php
 $result = mysql_query("SELECT nick, pais
-FROM users 
+FROM users
 WHERE fecha_last > '".date('Y-m-d H:i:00', time() - 3600)."' AND estado != 'expulsado'
 ORDER BY fecha_last DESC", $link);
-while($r = mysql_fetch_array($result)){ 
-	$li_online_num++; 
+while($r = mysql_fetch_array($result)){
+	$li_online_num++;
 	if ($li_online_num <= 50) {
 	$li_online .= '<a href="http://'.strtolower($r['pais']).'.'.DOMAIN.'/perfil/'.$r['nick'].'" style="color:#AAA;">'.$r['nick'].'</a> '; }
 }
 
 echo '<p><b>'.num($li_online_num).' '._('ciudadanos').'</b> '._('online').':<br />
-'.$li_online.'</td>'; 
+'.$li_online.'</td>';
 ?>
 
 	</div>
@@ -105,7 +105,7 @@ echo '<p><b>'.num($li_online_num).' '._('ciudadanos').'</b> '._('online').':<br 
 <?php
 unset($txt_header);
 if (isset($pol['user_ID'])) {
-	echo '<span class="htxt"><b><a href="http://'.strtolower($pol['pais']).'.virtualpol.com/perfil/'.$pol['nick'].'">'.$pol['nick'].($pol['cargo']!=0&&$pol['cargo']!=99?' <img src="'.IMG.'cargos/'.$pol['cargo'].'.gif" border="0" width="16" height="16" />':'').'</a>'.($pol['estado']!='ciudadano'?' (<b class="'.$pol['estado'].'">'.ucfirst(_($pol['estado'])).'</b>)':'').' | <a href="'.REGISTRAR.'login.php?a=panel">'._('Opciones').'</a> | <a href="'.REGISTRAR.'login.php?a=logout">'._('Salir').'</a></b></span>';
+	echo '<span class="htxt"><b><a href="http://'.strtolower($pol['pais']).'.virtualpol.vacau.com/perfil/'.$pol['nick'].'">'.$pol['nick'].($pol['cargo']!=0&&$pol['cargo']!=99?' <img src="'.IMG.'cargos/'.$pol['cargo'].'.gif" border="0" width="16" height="16" />':'').'</a>'.($pol['estado']!='ciudadano'?' (<b class="'.$pol['estado'].'">'.ucfirst(_($pol['estado'])).'</b>)':'').' | <a href="'.REGISTRAR.'login.php?a=panel">'._('Opciones').'</a> | <a href="'.REGISTRAR.'login.php?a=logout">'._('Salir').'</a></b></span>';
 } else {
 	echo boton(_('Crear ciudadano'), REGISTRAR.'?p='.PAIS, false, 'large green').' '.boton(_('Iniciar sesión'), REGISTRAR.'login.php?r='.base64_encode('http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']), false, 'large blue');
 }
@@ -138,10 +138,10 @@ if (isset($pol['user_ID'])) {
 	<div id="footer">
 
 		<div id="footer-right">
-			<p><?=_('VirtualPol, la primera <b>Red Social Democrática</b>')?> <?=boton(_('Donar'), 'https://virtualpol.com/donaciones', false, 'small pill orange')?></p>
-			
-			<p><a target="_blank" href="http://www.virtualpol.com/video"><?=_('Vídeo')?></a> | <a target="_blank" href="http://www.virtualpol.com/documentacion"><?=_('Ayuda / Documentación')?></a><br />
-			<a target="_blank" href="http://www.virtualpol.com/desarrollo"><?=_('Desarrollo / Código fuente')?></a> | <a target="_blank" href="http://www.virtualpol.com/TOS" title="Condiciones de Uso">TOS</a><br />
+			<p><?=_('VirtualPol, la primera <b>Red Social Democrática</b>')?> <?=boton(_('Donar'), 'https://virtualpol.vacau.com/donaciones', false, 'small pill orange')?></p>
+
+			<p><a target="_blank" href="http://www.virtualpol.vacau.com/video"><?=_('Vídeo')?></a> | <a target="_blank" href="http://www.virtualpol.vacau.com/documentacion"><?=_('Ayuda / Documentación')?></a><br />
+			<a target="_blank" href="http://www.virtualpol.vacau.com/desarrollo"><?=_('Desarrollo / Código fuente')?></a> | <a target="_blank" href="http://www.virtualpol.vacau.com/TOS" title="Condiciones de Uso">TOS</a><br />
 <?php
 unset($txt);
 if (!isset($pol['user_ID'])) { echo '<a target="_blank" href="http://gonzo.teoriza.com" title="GONZO">Javier González</a> (<a target="_blank" href="http://www.teoriza.com" title="Blogs">Teoriza</a>, <a target="_blank" href="http://www.eventuis.com" title="Eventos">eventuis</a>, <a target="_blank" href="http://www.perfectcine.com" title="Cine">PerfectCine</a>)<br />'; }
@@ -150,12 +150,12 @@ if ($pol['user_ID'] == 1) { echo num((microtime(true)-TIME_START)*1000).'ms '.nu
 				<span title="<?=_('Época antigua en IRC')?>" style="color:#BBB;">2004-</span>2008-2012
 			</p>
 		</div>
-		
+
 		<div id="footer-left">
 <?php
 echo '<table border="0"><tr><td height="30" nowrap="nowrap"><b>'._('VirtualPol, la primera red social democrática').'</b></td>';
 echo '</tr></table>';
-?>	
+?>
 		</div>
 	</div>
 </div>
@@ -171,7 +171,7 @@ echo '</tr></table>';
 /* GA */
 var _gaq = _gaq || [];
 _gaq.push(['_setAccount', 'UA-59186-46']);
-_gaq.push(['_setDomainName', '.virtualpol.com']);
+_gaq.push(['_setDomainName', '.virtualpol.vacau.com']);
 _gaq.push(['_trackPageview']);
 (function() {
 var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
@@ -180,7 +180,7 @@ var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga
 })();
 
 /* CHARTBEAT */
-var _sf_async_config={uid:26055,domain:"virtualpol.com"};
+var _sf_async_config={uid:26055,domain:"virtualpol.vacau.com"};
 (function(){
   function loadChartbeat() {
     window._sf_endpt=(new Date()).getTime();
