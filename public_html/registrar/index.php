@@ -24,7 +24,7 @@ function comprobar_email($email){
     $mail_correcto = false;
 	$emails_falsos = $pol['config']['backlist_emails'];
 	$emails_falsos = explode("\n", $emails_falsos);
-	$domain = explode("@", $email); $domain = strtolower($domain[1]);	
+	$domain = explode("@", $email); $domain = strtolower($domain[1]);
     if ((strlen($email) >= 6) && (substr_count($email,"@") == 1) && (substr($email,0,1) != "@") && (substr($email,strlen($email)-1,1) != "@")){
        if ((!strstr($email,"'")) && (!strstr($email,"\"")) && (!strstr($email,"\\")) && (!strstr($email,"\$")) && (!strstr($email," "))) {
           if (substr_count($email,".")>= 1){
@@ -42,7 +42,7 @@ function comprobar_email($email){
        }
     }
     return $mail_correcto;
-} 
+}
 
 function onlynumbers($string) {
 	$eregi = eregi_replace("([A-Z0-9_]+)","",$string);
@@ -84,19 +84,19 @@ case 'registrar': //CHECK
 		$result = sql("SELECT ID FROM users WHERE (estado = 'expulsadoNO' OR fecha_registro > '".$margen."') AND (IP = '".direccion_IP('longip')."' OR hosts LIKE '%".direccion_IP()."%') LIMIT 1");
 		while ($r = r($result)) { $bloquear_registro = true; }
 
-		foreach (explode("\n", $pol['config']['backlist_IP']) AS $la_IP) {
-			$la_IP = trim($la_IP);
-			if (stristr(' '.direccion_IP(), ' '.explodear(' ', $la_IP, 0))) { $bloquear_registro = true; }
-		}
+//		foreach (explode("\n", $pol['config']['backlist_IP']) AS $la_IP) {
+//			$la_IP = trim($la_IP);
+//			if (stristr(' '.direccion_IP(), ' '.explodear(' ', $la_IP, 0))) { $bloquear_registro = true; }
+//		}
 
-		
+
 		if ($bloquear_registro === false) {
 
 
 		if ((CAPTCHA_REGISTRO == false) OR (animal_captcha_check($_POST['animal']) == true)) {
 
 			//CONTROL: solo letras y numeros en nick
-			if ((onlynumbers($nick) == true) AND (!in_array($nick, $nicks_prohibidos))) { 
+			if ((onlynumbers($nick) == true) AND (!in_array($nick, $nicks_prohibidos))) {
 
 				//CONTROL: contraseñas
 				$rn = $_POST['repid'];
@@ -122,26 +122,26 @@ case 'registrar': //CHECK
 									//Si existe referencia IP
 									$afiliacion = 0;
 									$result = sql("SELECT ID, user_ID, (SELECT nick FROM users WHERE ID = referencias.user_ID LIMIT 1) AS nick FROM referencias WHERE IP = '".$longip."' LIMIT 1");
-									while($r = r($result)){ 
+									while($r = r($result)){
 										$afiliacion = $r['user_ID'];
 										$ref = ' (ref: ' . crear_link($r['nick']) . ')';
 									}
-									
+
 									// gen API pass
 									$api_pass = substr(md5(mt_rand(1000000000,9999999999)), 0, 12);
 
 									//crea el ciudadano
-									if (strlen($pass1) != 32) { 
+									if (strlen($pass1) != 32) {
 										$pass_md5 = pass_key($pass1, 'md5');
 										$pass_sha = pass_key($pass1);
 									}
-									
-									sql("INSERT INTO users 
-(nick, pols, fecha_registro, fecha_last, partido_afiliado, estado, nivel, email, num_elec, online, fecha_init, ref, ref_num, api_pass, api_num, IP, nota, avatar, text, cargo, visitas, paginas, nav, voto_confianza, confianza_historico, pais, pass, pass2, host, IP_proxy, dnie_check, bando, nota_SC, fecha_legal) 
+
+									sql("INSERT INTO users
+(nick, pols, fecha_registro, fecha_last, partido_afiliado, estado, nivel, email, num_elec, online, fecha_init, ref, ref_num, api_pass, api_num, IP, nota, avatar, text, cargo, visitas, paginas, nav, voto_confianza, confianza_historico, pais, pass, pass2, host, IP_proxy, dnie_check, bando, nota_SC, fecha_legal)
 VALUES ('".$nick."', '0', '".$date."', '".$date."', '', 'validar', '1', '" . strtolower($email) . "', '0', '0', '" . $date . "', '".$afiliacion."', '0', '".$api_pass."', '0', '" . $IP . "', '0.0', 'false', '', '', '0', '0', '" . $_SERVER['HTTP_USER_AGENT'] . "', '0', '0', '".(in_array($_GET['p'], $vp['paises'])?$_GET['p']:'ninguno')."', '".$pass_md5."', '".$pass_sha."', '".@gethostbyaddr($_SERVER['REMOTE_ADDR'])."', '".ip2long($_SERVER['HTTP_X_FORWARDED_FOR'])."', null, null, '".((($_POST['nick_clon']=='')||(strtolower($_POST['nick_clon'])=='no'))?'':'Comparte con: '.$_POST['nick_clon'])."', '".$date."')");
 									$result = sql("SELECT ID FROM users WHERE nick = '".$nick."' LIMIT 1");
 									while($r = r($result)){ $new_ID = $r['ID']; }
-									
+
 									if (!$_COOKIE['trz']) {
 										$_COOKIE['trz'] = round(microtime(true)*10000);
 										setcookie('trz', $_COOKIE['trz'], (time()+(86400*365)), '/', USERCOOKIE);
@@ -182,7 +182,7 @@ VALUES ('".$nick."', '0', '".$date."', '".$date."', '', 'validar', '1', '" . str
 
 case 'verificar': //URL EMAIL
 	$result = sql("SELECT ID, nick, pass, pais FROM users WHERE estado = 'validar' AND nick = '".$_GET['nick']."' AND api_pass = '".$_GET['code']."' LIMIT 1");
-	while ($r = r($result)) { 
+	while ($r = r($result)) {
 
 		notificacion($r['ID'], _('Bienvenido!'), '/doc/bienvenida');
 		notificacion($r['ID'], _('Sitúate en mapa de ciudadanos!'), '/geolocalizacion');
@@ -193,7 +193,7 @@ case 'verificar': //URL EMAIL
 		} else {
 			sql("UPDATE users SET estado = 'ciudadano' WHERE ID = '".$r['ID']."' LIMIT 1");
 
-			
+
 			$result2 = sql("SELECT COUNT(*) AS num FROM users WHERE estado = 'ciudadano' AND pais = '".$r['pais']."'");
 			while ($r2 = r($result2)) { $ciudadanos_num = $r2['num']; }
 
@@ -201,7 +201,7 @@ case 'verificar': //URL EMAIL
 
 			unset($_SESSION);
 			session_unset(); session_destroy();
-			
+
 			redirect(REGISTRAR.'login.php?a=login&user='.$r['nick'].'&pass_md5='.$r['pass'].'&url_http=http://'.strtolower($r['pais']).'.'.DOMAIN);
 		}
 	}
@@ -210,7 +210,7 @@ case 'verificar': //URL EMAIL
 
 
 case 'solicitar-ciudadania':
-	
+
 
 	// tiene kick?
 	$result = sql("SELECT ID FROM ".strtolower($_POST['pais'])."_ban WHERE estado = 'activo' AND user_ID = '" . $pol['user_ID'] . "' LIMIT 1");
@@ -225,7 +225,7 @@ case 'solicitar-ciudadania':
 
 	if (($pol['user_ID']) AND ($tiene_kick != true) AND ($user_pais == 'ninguno') AND ($pol['estado'] == 'turista') AND ($pais_existe != false)) {
 		sql("UPDATE users SET estado = 'ciudadano', pais = '".$pais_existe."' WHERE estado = 'turista' AND pais = 'ninguno' AND ID = '".$pol['user_ID']."' LIMIT 1");
-	
+
 		$result2 = sql("SELECT COUNT(*) AS num FROM users WHERE estado = 'ciudadano' AND pais = '".$_POST['pais']."'");
 		while ($r2 = r($result2)) { $ciudadanos_num = $r2['num']; }
 
@@ -235,9 +235,9 @@ case 'solicitar-ciudadania':
 		session_unset(); session_destroy();
 
 		redirect('http://'.strtolower($_POST['pais']).'.'.DOMAIN);
-	
+
 	} else { redirect(REGISTRAR); }
-	
+
 	break;
 
 
@@ -292,7 +292,7 @@ $txt .= '</blockquote>';
 } elseif (($pol['estado'] == 'turista') AND ($pol['pais'] == 'ninguno')) {
 	$txt_title = _('Solicitar ciudadanía');
 	$txt_nav = array(_('Solicitar ciudadanía'));
-	$atrack = '"/atrack/registro/solicitar.html"'; 
+	$atrack = '"/atrack/registro/solicitar.html"';
 
 	if (!$_GET['pais']) { $_GET['pais'] = $vp['paises'][0]; }
 
@@ -305,7 +305,7 @@ $txt .= '</blockquote>';
 
 <table border="0" cellspacing="4">';
 	$n = 0;
-	
+
 	$result = sql("SELECT pais, valor AS num FROM config WHERE dato = 'info_censo' ORDER BY ABS(valor) DESC LIMIT 25");
 	while($r = r($result)) {
 

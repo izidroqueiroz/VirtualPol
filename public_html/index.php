@@ -10,7 +10,7 @@
 include('inc-login.php');
 
 
-$txt_description = _('La primera Red Social Democrática').'. Simulador Politico y social Español, democracia participativa, simulador, politica'; 
+$txt_description = _('La primera Red Social Democrática').'. Simulador Politico y social Español, democracia participativa, simulador, politica';
 
 /* Datos estadisticos
 Se contabilizan los siguientes datos antiguos conservadas en tablas antiguas.
@@ -22,10 +22,10 @@ Vulcan 161 954
 VP 369 11341
 */
 $result = sql("SELECT COUNT(*) AS num FROM votacion");
-while($r = r($result)) { $num_votaciones = $r['num']+2784; }
+while($r = r($result)) { $num_votaciones = $r['num']; }
 
 $result = sql("SELECT COUNT(*) AS num FROM votacion_votos");
-while($r = r($result)) { $num_votaciones_votos = $r['num']+46133; }
+while($r = r($result)) { $num_votaciones_votos = $r['num']; }
 
 $result = sql("SELECT COUNT(*) AS num FROM votos");
 while($r = r($result)) { $num_votos = $r['num']; }
@@ -84,7 +84,7 @@ while($r = r($result)) {
 <em style="color:#777;">'.ucfirst($pais_config['tipo']).'</em></td>
 
 </tr>';
-	
+
 	$poblacion_num += $r['num'];
 }
 
@@ -102,7 +102,7 @@ $txt .= '<tr><td style="border-bottom:1px solid grey;" colspan="2"><a href="#" o
 $result = sql("SELECT COUNT(*) AS num FROM plataformas WHERE estado = 'pendiente'");
 while($r = r($result)) { $plat_num = $r['num']; }
 
-if ($pol['user_ID'] == 1) { $txt_tab['/crear-plataforma.php?a=admin'] = 'Plataformas pendientes ('.$plat_num.')'; }
+if ($pol['user_ID'] == 220513) { $txt_tab['/crear-plataforma.php?a=admin'] = 'Plataformas pendientes ('.$plat_num.')'; }
 
 include('theme.php');
 ?>

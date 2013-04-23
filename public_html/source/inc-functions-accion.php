@@ -597,7 +597,7 @@ function users_con($user_ID, $extra='', $tipo='session', $rejs=false) {
 	$_SERVER['HTTP_X_FORWARDED_FOR'] = (filter_var($_SERVER['HTTP_X_FORWARDED_FOR'], FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)&&substr($_SERVER['HTTP_X_FORWARDED_FOR'], 0, 3)!='127'?$_SERVER['HTTP_X_FORWARDED_FOR']:'');
 	if (($_SERVER['HTTP_X_FORWARDED_FOR'] != '') AND (substr(long2ip($IP), 0, 10) == '80.58.205.')) { $IP = ip2long($_SERVER['HTTP_X_FORWARDED_FOR']); }
 
-	$i = get_browser(null, true);
+	// $i = get_browser(null, true);
 
 	sql("INSERT INTO users_con (user_ID, time, IP, host, proxy, nav, login_ms, login_seg, nav_resolucion, ISP, tipo, nav_so, IP_pais, IP_rango, IP_rango3, dispositivo) 
 VALUES ('".$user_ID."', '".date('Y-m-d H:i:s')."', '".$IP."', '".$host."', '".$_SERVER['HTTP_X_FORWARDED_FOR']."', '".$_SERVER['HTTP_USER_AGENT']." | ".$_SERVER['HTTP_ACCEPT_LANGUAGE']."".($extra_array[0]?" | ".$extra_array[0]." ".$extra_array[3]:"")."', '".round((microtime(true)-TIME_START)*1000)."', '".$extra_array[2]."', ".($extra_array[0]?"'".$extra_array[0]." ".$extra_array[3]."'":"NULL").", ".$ISP.", '".$tipo."', '".str_replace('Android Android', 'Android', $i['platform']." ".$i['parent'])."', ".$el_pais.", '".$la_IP[0].".".$la_IP[1]."', '".$la_IP[0].".".$la_IP[1].".".$la_IP[2]."', ".($_COOKIE['trz']?"'".$_COOKIE['trz']."'":"NULL").")");

@@ -41,7 +41,7 @@ msgstr "días"
 
 #: D:\www\VirtualPol\public_html\./index.php:145
 msgid "Ciudadanos"
-msgstr "Ciudadanos"
+msgstr "Cidadãos"
 
 #: D:\www\VirtualPol\public_html\./index.php:149
 msgid "Autentificados"
@@ -105,7 +105,7 @@ msgstr "Salir"
 
 #: D:\www\VirtualPol\public_html\./theme.php:112
 msgid "Crear ciudadano"
-msgstr "Crear ciudadano"
+msgstr "Criar cidadão"
 
 #: D:\www\VirtualPol\public_html\./theme.php:112
 msgid "Iniciar sesión"

@@ -14,16 +14,17 @@ include(RAIZ.'config-pwd.php');						// Passwords y claves
 include(RAIZ.'source/inc-functions.php');			// Funciones basicas
 $link = conectar();									// Conecta MySQL
 $pais = explodear('.', $_SERVER['HTTP_HOST'], 0);	// Obtiene "PAIS" de "PAIS.dominio.com"
+/// $pais = 'rede';
 
 
 // LOAD CONFIG
 $result = mysql_unbuffered_query("SELECT dato, valor FROM config WHERE pais = '".escape($pais)."' AND autoload = 'si'");
-while ($r = r($result)) { 
+while ($r = r($result)) {
 	switch ($r['dato']) {
 		case 'PAIS': define('PAIS', $r['valor']); break;
 		case 'ASAMBLEA': case 'ECONOMIA':  define($r['dato'], ($r['valor']=='true'?true:false)); break;
 
-		case 'acceso': 
+		case 'acceso':
 			foreach(explode('|', $r['valor']) AS $item) {
 				$elem = explode(';', $item);
 				$elem1 = explode(':', $elem[1]);
@@ -32,7 +33,7 @@ while ($r = r($result)) {
 			break;
 
 		default: $pol['config'][$r['dato']] = $r['valor'];
-	} 
+	}
 }
 
 // TIMEZONE
@@ -49,11 +50,11 @@ $vp['langs'] = array(
 'eu'=>'Euskera (20%)',
 'de_DE'=>'Deutsch (30%)',
 'ja'=>'Japanese (10%)',
-'pt'=>'Português (10%)',
+'pt_BR'=>'Português (10%)',
 );
 
 // CONFIG PLATAFORMAS (pendiente de desmantelar)
-$vp['paises'] = array('15M', 'Hispania', 'MIC', 'JRO', 'ETSIIT', 'Occupy', 'PCP', 'FCSM', 'PDI', '25S', 'Plebiscito', 'POL');
+$vp['paises'] = array('rede', 'teste');
 
 
 if ($pais == 'www') {
@@ -64,10 +65,10 @@ if ($pais == 'www') {
 
 
 // CONFIG
-define('PROYECTO', 'VirtualPol');
-define('PROYECTO_ESLOGAN', 'La primera red social democrática');
-define('DOMAIN', 'virtualpol.com');
-define('CONTACTO_EMAIL', 'desarrollo@virtualpol.com');
+define('PROYECTO', '#rede');
+define('PROYECTO_ESLOGAN', '#rede - democracia participativa');
+define('DOMAIN', 'virtualpol.vacau.com');
+define('CONTACTO_EMAIL', 'rede@virtualpol.vacau.com');
 
 define('SQL', strtolower(PAIS).'_');
 define('USERCOOKIE', '.'.DOMAIN);
@@ -82,14 +83,14 @@ $columnas = 14; $filas = 14; // Dimensiones mapa
 
 // URLS
 
-define('REGISTRAR', 'https://www.'.DOMAIN.'/registrar/'); // Zona de registro y opciones de usuario
-define('SSL_URL', 'https://www.'.DOMAIN.'/'); // SSL_URL | http://www.virtualpol.com/ = https://www.virtualpol.com/
+define('REGISTRAR', 'http://'.DOMAIN.'/registrar/'); // Zona de registro y opciones de usuario
+define('SSL_URL', 'http://'.DOMAIN.'/'); // SSL_URL | http://www.virtualpol.com/ = https://www.virtualpol.com/
 
 if ($_SERVER['HTTPS']) {
-	define('IMG', 'https://www.'.DOMAIN.'/img/'); // Archivos estaticos bajo https
+	define('IMG', 'http://'.DOMAIN.'/img/'); // Archivos estaticos bajo https
 } else {
-	define('IMG', 'http://www.'.DOMAIN.'/img/'); // Archivos estaticos
+	define('IMG', 'http://'.DOMAIN.'/img/'); // Archivos estaticos
 }
 
-define('MONEDA', '<img src="'.IMG.'varios/m.gif" />'); 
+define('MONEDA', '<img src="'.IMG.'varios/m.gif" />');
 ?>

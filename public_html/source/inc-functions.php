@@ -10,8 +10,8 @@
 
 // MySQL micro-framework v0.2
 function sql($q,$l=null) {
-	global $link; 
-	if($l===true){$rr=mysql_query($q,$link);while($r=mysql_fetch_row($rr)){return $r[0];}} 
+	global $link;
+	if($l===true){$rr=mysql_query($q,$link);while($r=mysql_fetch_row($rr)){return $r[0];}}
 	else{return mysql_query($q,($l===null?$link:$l));}
 }
 function r($q) {return mysql_fetch_assoc($q);}
@@ -42,8 +42,8 @@ function nucleo_acceso($tipo, $valor='', $pais=false) {
 		case 'autentificados': if ($_SESSION['pol']['dnie'] == 'true') { $rt = true; } break;
 		case 'supervisores_censo': if ($_SESSION['pol']['SC'] == 'true') { $rt = true; } break;
 		case 'antiguedad': if ((isset($_SESSION['pol']['fecha_registro'])) AND (strtotime($_SESSION['pol']['fecha_registro']) < (time() - ($valor*86400)))) { $rt = true; } break;
-		case 'print': 
-			if (ASAMBLEA) {	return array('privado'=>'Nick ...', 'excluir'=>'Nick ...', 'afiliado'=>'partido_ID', 'confianza'=>'0', 'cargo'=>'cargo_ID ...', 'grupos'=>'grupo_ID ...', 'nivel'=>'1', 'antiguedad'=>'365', 'socios'=>'', 'autentificados'=>'', 'supervisores_censo'=>'', 'ciudadanos'=>'', 'ciudadanos_global'=>'', 'anonimos'=>''); } 
+		case 'print':
+			if (ASAMBLEA) {	return array('privado'=>'Nick ...', 'excluir'=>'Nick ...', 'afiliado'=>'partido_ID', 'confianza'=>'0', 'cargo'=>'cargo_ID ...', 'grupos'=>'grupo_ID ...', 'nivel'=>'1', 'antiguedad'=>'365', 'socios'=>'', 'autentificados'=>'', 'supervisores_censo'=>'', 'ciudadanos'=>'', 'ciudadanos_global'=>'', 'anonimos'=>''); }
 			else { return array('privado'=>'Nick ...', 'excluir'=>'Nick ...', 'afiliado'=>'partido_ID', 'confianza'=>'0', 'cargo'=>'cargo_ID ...', 'grupos'=>'grupo_ID ...', 'nivel'=>'1', 'antiguedad'=>'365', 'monedas'=>'0', 'socios'=>'', 'autentificados'=>'', 'supervisores_censo'=>'', 'ciudadanos'=>'', 'ciudadanos_global'=>'', 'anonimos'=>''); }
 			exit;
 	}
@@ -63,7 +63,7 @@ function verbalizar_acceso($tipo, $valor='') {
 		case 'privado': if ($valor == '') { $t = _('nadie'); } else { $t = _('los ciudadanos').': '.$valor; } break;
 		case 'confianza': $t = _('ciudadanos con confianza mayor o igual a').' '.confianza($valor).' (<a href="/censo/confianza">'._('Ver confianza').'</a>)'; break;
 		case 'nivel': $t = _('ciudadanos con nivel').' <em>'.$valor.'</em> '._('o mayor').' (<a href="/cargos">'._('Ver cargos').'</a>)'; break;
-		
+
 		case 'examenes':
 			$val = array();
 			$result = sql("SELECT titulo AS nom FROM examenes WHERE pais = '".PAIS."' AND ID IN (".implode(',', explode(' ', $valor)).")");
@@ -92,7 +92,7 @@ function verbalizar_acceso($tipo, $valor='') {
 			while($r = r($result)) { $val[] = $r['nom']; }
 			$t = _('ciudadanos afiliados al grupo:').' <a href="/grupos">'.implode(', ', $val).'</a>';
 			break;
-		
+
 		case 'monedas': $t = _('ciudadanos con al menos').' <em>'.$valor.'</em> '._('monedas'); break;
 		case 'socios': $t = _('ciudadanos inscritos como socios de').' '.PAIS; break;
 		case 'autentificados': $t = _('ciudadanos autentificados'); break;
@@ -138,7 +138,7 @@ function control_acceso($titulo=false, $name='', $acceso='', $cfg='', $quitar_ar
 	$array = nucleo_acceso('print');
 	foreach ($array AS $a => $b) { if (in_array($a, $quitar_array)) { unset($array[$a]); } }
 	foreach ($array AS $at => $at_var) {
-		$html .= '<option value="'.$at.'"'.($at==$acceso?' selected="selected"':'').' />'.ucfirst(str_replace('_', ' ', $at)).'</option>';
+		$html .= '<option value="'.$at.'"'.($at==$acceso?' selected="selected"':'').' />'._(ucfirst(str_replace('_', ' ', $at))).'</option>';
 	}
 	$html .= '</select>'.($inline?' ':'<br />').'<input type="text" name="'.$name.'_cfg" size="18" maxlength="9000" id="'.$name.'_cfg_var" value="'.$cfg.'" />'.($titulo==false?'':'</fieldset>');
 	return $html;
@@ -156,12 +156,12 @@ function notificacion($user_ID, $texto='', $url='', $emisor='sistema') {
 
 				// NOTIFICACION VOTACIONES
 				$pol['config']['info_consultas'] = 0;
-				$result = sql("SELECT v.ID, pregunta, acceso_votar, acceso_cfg_votar, acceso_ver, acceso_cfg_ver 
+				$result = sql("SELECT v.ID, pregunta, acceso_votar, acceso_cfg_votar, acceso_ver, acceso_cfg_ver
 				FROM votacion `v`
 				LEFT OUTER JOIN votacion_votos `vv` ON v.ID = vv.ref_ID AND vv.user_ID = '".$pol['user_ID']."'
 				WHERE v.estado = 'ok' AND (v.pais = '".PAIS."' OR acceso_votar IN ('supervisores_censo', 'privado')) AND vv.ID IS null");
 				while($r = r($result)) {
-					if ((nucleo_acceso($r['acceso_votar'], $r['acceso_cfg_votar'])) AND (nucleo_acceso($r['acceso_ver'], $r['acceso_cfg_ver']))) { 
+					if ((nucleo_acceso($r['acceso_votar'], $r['acceso_cfg_votar'])) AND (nucleo_acceso($r['acceso_ver'], $r['acceso_cfg_ver']))) {
 						$pol['config']['info_consultas']++;
 						$nuevos_num++;
 						$total_num++;
@@ -182,17 +182,17 @@ function notificacion($user_ID, $texto='', $url='', $emisor='sistema') {
 			break;
 
 
-		case 'visto': 
+		case 'visto':
 			$result = sql("SELECT noti_ID, visto, texto, url FROM notificaciones WHERE noti_ID = '".$texto."' LIMIT 1");
 			while($r = r($result)) {
 				if ($r['visto'] == 'false') {
-					sql("UPDATE notificaciones SET visto = 'true' WHERE visto = 'false' AND user_ID = '".$pol['user_ID']."' AND texto = '".$r['texto']."'"); 
+					sql("UPDATE notificaciones SET visto = 'true' WHERE visto = 'false' AND user_ID = '".$pol['user_ID']."' AND texto = '".$r['texto']."'");
 				}
 				redirect($r['url']);
 			}
 			break;
 
-		default: 
+		default:
 			sql("INSERT INTO notificaciones (user_ID, texto, url, emisor) VALUES ('".$user_ID."', '".$texto."', '".$url."', '".$emisor."')");
 			return true;
 	}
@@ -228,27 +228,27 @@ function pass_key($t, $type='sha') {
 
 function timer($t, $es_timestamp=false, $pre=null) {
 	if ($pre == true) { if (time() > strtotime($t)) { $pre = _('Hace').' '; } else { $pre = _('En').' '; } }
-	return $pre.'<span class="timer" value="'.($es_timestamp==true?$t:strtotime($t)).'" title="'.$t.'"></span>'; 
+	return $pre.'<span class="timer" value="'.($es_timestamp==true?$t:strtotime($t)).'" title="'.$t.'"></span>';
 }
 
-function ocultar_IP($IP, $tipo='IP') { 
-	// devuelve el host o IP indicado cortando alguno de sus datos, para proteger la privacidad 
+function ocultar_IP($IP, $tipo='IP') {
+	// devuelve el host o IP indicado cortando alguno de sus datos, para proteger la privacidad
 	if ($tipo == 'IP') {
 		$trozos = explode('.', long2ip($IP));
 		return $trozos[0].'.'.$trozos[1].'.'.$trozos[2].'.*';
 	} elseif ($tipo == 'host') {
 		$host = '';
 		$hosts = explode('.', $IP);
-		if (strlen($hosts[count($hosts)-3]) > 4) { 
-			$host = $hosts[count($hosts)-4].'.'.$hosts[count($hosts)-3].'.'.$hosts[count($hosts)-2].'.'.$hosts[count($hosts)-1]; 
+		if (strlen($hosts[count($hosts)-3]) > 4) {
+			$host = $hosts[count($hosts)-4].'.'.$hosts[count($hosts)-3].'.'.$hosts[count($hosts)-2].'.'.$hosts[count($hosts)-1];
 		}
 		return '*.'.$host;
 	}
 }
 
 function redirect($url, $r301=true) {
-	if ($r301 == true) { header('HTTP/1.1 301 Moved Permanently'); } 
-	header('Location: '.$url); 
+	if ($r301 == true) { header('HTTP/1.1 301 Moved Permanently'); }
+	header('Location: '.$url);
 	mysql_close();
 	exit;
 }
@@ -269,24 +269,24 @@ function duracion($t) {
 
 function crear_link($a, $tipo='nick', $estado='', $pais='') {
 	switch ($tipo) {
-		case 'nick': 
+		case 'nick':
 			if ($a == 'VirtualPol') {
 				return 'VirtualPol';
-			} else if ($a) { 
+			} else if ($a) {
 				$bg = '';
 				if ($pais) {
 					//global $vp;
 					//$bg = ' style="background:'.$vp['bg'][$pais].';"';
 					$add_class .= ' redondeado';
 				}
-				if (($estado) && ($estado != 'ciudadano')) { 
+				if (($estado) && ($estado != 'ciudadano')) {
 					return '<a href="/perfil/'.$a.'" class="nick'.$add_class.' '.$estado.'"'.$bg.'>'.$a.'</a>';
 				} else {
 					return '<a href="/perfil/'.$a.'" class="nick'.$add_class.'"'.$bg.'>'.$a.'</a>';
 				}
-			} else { 
-				return '<span title="Expirado">&dagger;</span>'; 
-			} 
+			} else {
+				return '<span title="Expirado">&dagger;</span>';
+			}
 			break;
 		case 'partido': if ($a) { return '<a href="/partidos/'.strtolower($a).'">'.$a.'</a>'; } else { return 'Ninguno'; } break;
 		case 'documento': return '<a href="/doc/'.$a.'">/doc/'.$a.'</a>'; break;
@@ -298,8 +298,8 @@ function mumble_url($canal='') {
 	return 'mumble://'.$pol['nick'].':vp@virtualpol.mumble.com:3704/'.$canal.'?version=1.2.0';
 }
 
-function accion_url($pais=false) { 
-	//return SSL_URL.'source/accion.php?http_host='.($pais==false?HOST:strtolower($pais).'.'.DOMAIN).'&'; 
+function accion_url($pais=false) {
+	//return SSL_URL.'source/accion.php?http_host='.($pais==false?HOST:strtolower($pais).'.'.DOMAIN).'&';
 	return '/accion.php?';
 }
 function vp_url($path='/', $pais=PAIS) { return 'http://'.strtolower($pais).'.'.DOMAIN.$path; }
@@ -311,8 +311,8 @@ function entre($num, $min, $max) { if ((is_numeric($num)) AND ($num >= $min) AND
 function direccion_IP($tipo='ip') { return ($tipo=='longip'?ip2long($_SERVER['REMOTE_ADDR']):$_SERVER['REMOTE_ADDR']); }
 function avatar($user_ID, $size='') { return '<img src="'.IMG.'a/'.$user_ID.($size?'_'.$size:'').'.jpg" alt="'.$user_ID.'"'.($size!=''?' width="'.$size.'" height="'.$size.'" class="redondeado"':'').' />'; }
 function pols($pols) { return '<span class="'.($pols<0?'pn':'pp').'">'.number_format($pols, 0, ',', '.').'</span>'; }
-function tiempo($dias=0, $hora='H:i:s', $tipo='pasado') { 
-	return date('Y-m-d '.$hora, ($tipo=='pasado'?time()-(86400*round($dias)):time()+(86400*round($dias)))); 
+function tiempo($dias=0, $hora='H:i:s', $tipo='pasado') {
+	return date('Y-m-d '.$hora, ($tipo=='pasado'?time()-(86400*round($dias)):time()+(86400*round($dias))));
 }
 
 function boton($texto, $url=false, $confirm=false, $size=false, $pols='', $html_extra=false) {
@@ -329,11 +329,11 @@ function paginacion($type, $url, $ID, $num_ahora=null, $num_total=null, $num='10
 	global $p_limit, $p_paginas, $p_init;
 	if (!$num_total) {
 		switch ($type) {
-			case 'subforo': 
+			case 'subforo':
 				$result = mysql_fetch_row(sql("SELECT COUNT(ID) FROM ".SQL."foros_hilos WHERE ID = '".$ID."'"));
 				$num_total = $result[0];
 				break;
-			case 'eventos': 
+			case 'eventos':
 				$result = mysql_fetch_row(sql("SELECT COUNT(ID) FROM log WHERE pais = '".PAIS."'"));
 				$num_total = $result[0];
 				break;
@@ -358,12 +358,12 @@ function paginacion($type, $url, $ID, $num_ahora=null, $num_total=null, $num='10
 		$p_limit = (($num_ahora - 1) * $num) . ', ' . $num;
 		$p_init = (($num_ahora - 1) * $num);
 	} else {
-	
+
 		if ($num_total > ($num_paginas * $num)) { $num_paginas++; }
 		if (!$num_ahora) { $num_ahora = $num_paginas; }
 
 		for ($i=1;$i <= $num_paginas;$i++) {
-			if ($i == $num_paginas) { $el_url = $url; } 
+			if ($i == $num_paginas) { $el_url = $url; }
 			else { $el_url = $url . $i . '/'; }
 
 			if ($i == $num_ahora) {
@@ -386,7 +386,7 @@ function chart_data($values, $maxValue=false) {
 		$currentValue = $values[$i];
 		if ($currentValue == 0) {
 			$chartData.=substr($simpleEncoding,61*0,1);
-		} elseif ($currentValue > -1) { $chartData.=substr($simpleEncoding,61*($currentValue/$maxValue),1); 
+		} elseif ($currentValue > -1) { $chartData.=substr($simpleEncoding,61*($currentValue/$maxValue),1);
 		} else { $chartData.='_'; }
 	}
 	return $chartData;
@@ -394,7 +394,7 @@ function chart_data($values, $maxValue=false) {
 
 function confianza($num, $votos_num=false) {
 	if ($num >= 10) { $t = 'vcc">+'; }
-	elseif ($num >= 0) { $t = 'vc">+'; } 
+	elseif ($num >= 0) { $t = 'vc">+'; }
 	elseif ($num > -10) { $t = 'vcn">'; }
 	else { $t = 'vcnn">'; }
 	return '<span'.($votos_num!=false?' title="+'.(($votos_num+$num)/2).' -'.($votos_num-(($votos_num+$num)/2)).' ('.$votos_num.' votos)"':'').' class="'.$t.$num.'</span>';

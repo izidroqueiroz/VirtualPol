@@ -9,6 +9,8 @@
 
 define('TIME_START', microtime(true));
 
+// require_once('gettext.inc');
+
 include('config.php'); // config raiz
 
 
@@ -22,10 +24,10 @@ foreach (array('GET', 'POST', 'REQUEST', 'COOKIE') AS $_) {
 	foreach (${'_'.$_} AS $key=>$value) {
 		if (get_magic_quotes_gpc()) { $value = stripslashes($value); }
 		$value = str_replace(
-			array("\r\n",   "\n",     '\'',    '"',     '\\'   ), 
+			array("\r\n",   "\n",     '\'',    '"',     '\\'   ),
 			array('<br />', '<br />', '&#39;', '&#34;', '&#92;'),
 		$value);
-		${'_'.$_}[$key] = mysql_real_escape_string($value); 
+		${'_'.$_}[$key] = mysql_real_escape_string($value);
 	}
 }
 
@@ -36,7 +38,7 @@ if (!isset($_SESSION)) { session_start(); } // inicia sesion PHP
 // nucleo del sistema de usuarios, comienza la verificación
 if (isset($_COOKIE['teorizauser'])) {
 	$result = mysql_query("SELECT ID, pass, lang, nick, estado, pols, pais, email, fecha_registro, rechazo_last, cargo, cargos, examenes, nivel, dnie FROM users WHERE nick = '".$_COOKIE['teorizauser']."' LIMIT 1", $link);
-	while ($r = mysql_fetch_array($result)) { 
+	while ($r = mysql_fetch_array($result)) {
 		if (md5(CLAVE.$r['pass']) == $_COOKIE['teorizapass']) { // cookie pass OK
 			$session_new = true;
 			$pol['nick'] = $r['nick'];
@@ -62,7 +64,7 @@ if (isset($_COOKIE['teorizauser'])) {
 			$_SESSION['pol']['estado'] = $r['estado'];
 			$_SESSION['pol']['dnie'] = $r['dnie'];
 		}
-	}  
+	}
 }
 
 
@@ -70,16 +72,26 @@ if (isset($_COOKIE['teorizauser'])) {
 // Forzado SSL
 if (false AND !$_SERVER['HTTPS'] AND isset($pol['nick'])) { redirect('https://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']); }
 
+define('LOCALE_DIR', RAIZ.'locale');
 
-$vp['lang'] = $pol['config']['lang'];
-if ((isset($vp['lang'])) AND ($vp['lang'] != 'es_ES')) {
+$vp['lang'] = 'pt_BR';
+if (isset($pol['config']['lang'])) {
+   $vp['lang'] = $pol['config']['lang'];
+}
+
+//if ((isset($vp['lang'])) AND ($vp['lang'] != 'es_ES')) {
+if ((isset($vp['lang']))) {
 	// Carga internacionalización
-	$locale = $vp['lang'];
-	putenv("LC_ALL=$locale");
-	setlocale(LC_ALL, $locale);
-	bindtextdomain('messages', '/locale');
-	textdomain('messages');
-	bind_textdomain_codeset('messages', 'UTF-8');
+
+    	$locale = $vp['lang'];
+		putenv("LC_ALL=$locale");
+		setlocale(LC_ALL, $locale);
+		bindtextdomain('messages', LOCALE_DIR);
+		textdomain('messages');
+		bind_textdomain_codeset('messages', 'UTF-8');
+    // echo _('ciudadanos');
+
+
 }
 
 
